@@ -1,0 +1,32 @@
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if this release is the latest
+        id: check_latest
+        run: |
+          RELEASE_TAG="${{ github.event.release.tag_name }}"
+          LATEST_RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+          echo "Release Tag: $RELEASE_TAG"
+          echo "Latest Tag: $LATEST_RELEASE_TAG"
+          if [[ "$RELEASE_TAG" != "$LATEST_RELEASE_TAG" ]]; then
+            echo "Not the latest release. Exiting..."
+            exit 1
+          fi
+
+      # O deploy é feito remotamente via SSH, chamando seu script
+      - name: Deploy on production server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 91.108.124.118
+          username: root
+          password: JcjVGcww7@G6euv+
+          port: 22
+          script: |
+            # Caminho do script já existente no servidor
+             bash /var/www/pterodactyl/update_panel.sh ${{ github.event.release.tag_name }}
