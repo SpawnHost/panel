@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/elements/button/index';
 import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
@@ -10,6 +11,7 @@ interface PowerButtonProps {
 }
 
 export default ({ className }: PowerButtonProps) => {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
@@ -42,11 +44,13 @@ export default ({ className }: PowerButtonProps) => {
                 open={open}
                 hideCloseIcon
                 onClose={() => setOpen(false)}
-                title={'Forcibly Stop Process'}
-                confirm={'Continue'}
+                title={t('power.confirm_title', { defaultValue: 'Forçar parada do processo' })}
+                confirm={t('power.confirm_button', { defaultValue: 'Continuar' })}
                 onConfirmed={onButtonClick.bind(this, 'kill-confirmed')}
             >
-                Forcibly stopping a server can lead to data corruption.
+                {t('power.confirm_message', {
+                    defaultValue: 'Forçar a parada do servidor pode causar corrupção de dados.',
+                })}
             </Dialog.Confirm>
             <Can action={'control.start'}>
                 <Button
@@ -54,12 +58,12 @@ export default ({ className }: PowerButtonProps) => {
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
                 >
-                    Start
+                    {t('power.start', { defaultValue: 'Iniciar' })}
                 </Button>
             </Can>
             <Can action={'control.restart'}>
                 <Button.Text className={'flex-1'} disabled={!status} onClick={onButtonClick.bind(this, 'restart')}>
-                    Restart
+                    {t('power.restart', { defaultValue: 'Reiniciar' })}
                 </Button.Text>
             </Can>
             <Can action={'control.stop'}>
@@ -68,7 +72,9 @@ export default ({ className }: PowerButtonProps) => {
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                 >
-                    {killable ? 'Kill' : 'Stop'}
+                    {killable
+                        ? t('power.kill', { defaultValue: 'Matar' })
+                        : t('power.stop', { defaultValue: 'Parar' })}
                 </Button.Danger>
             </Can>
         </div>
