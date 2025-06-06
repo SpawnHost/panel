@@ -15,6 +15,8 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import classNames from 'classnames';
 import { ChevronDoubleRightIcon } from '@heroicons/react/solid';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 import 'xterm/css/xterm.css';
 import styles from './style.module.css';
@@ -52,6 +54,7 @@ const terminalProps: ITerminalOptions = {
 };
 
 export default () => {
+    const { t } = useTranslation();
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pterodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps }), []);
@@ -64,6 +67,8 @@ export default () => {
     const [canSendCommands] = usePermissions(['control.console']);
     const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
+    const status = ServerContext.useStoreState((state) => state.status.value);
+    const statusRef = useRef(status);
     const [history, setHistory] = usePersistedState<string[]>(`${serverId}:command_history`, []);
     const [historyIndex, setHistoryIndex] = useState(-1);
     // SearchBarAddon has hardcoded z-index: 999 :(
@@ -79,17 +84,27 @@ export default () => {
         switch (status) {
             // Sent by either the source or target node if a failure occurs.
             case 'failure':
-                terminal.writeln(TERMINAL_PRELUDE + 'Transfer has failed.\u001b[0m');
+                terminal.writeln(TERMINAL_PRELUDE + t('console.transfer_failed', {
+                    defaultValue: 'A transferência falhou.',
+                }) + '\u001b[0m');
                 return;
         }
     };
 
     const handleDaemonErrorOutput = (line: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + t('console.transfer_failed', {
-            defaultValue: 'A transferência falhou.',}) + '\u001b[0m');
+        terminal.writeln(
+            TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m'
+        );
+
     const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + t('console.state_change', {
-            defaultValue: 'Servidor marcado como {{state}}...', state, }) + '\u001b[0m');
+        terminal.writeln(
+            TERMINAL_PRELUDE +
+                t('console.state_change', {
+                    defaultValue: 'Servidor marcado como {{state}}...',
+                    state: state,
+                }) +
+                '\u001b[0m'
+        );
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {
@@ -121,6 +136,10 @@ export default () => {
     };
 
     useEffect(() => {
+        statusRef.current = status;
+    }, [status]);
+
+    useEffect(() => {
         if (connected && ref.current && !terminal.element) {
             terminal.loadAddon(fitAddon);
             terminal.loadAddon(searchAddon);
@@ -148,6 +167,24 @@ export default () => {
             });
         }
     }, [terminal, connected]);
+
+    useEffect(() => {
+        const onLanguageChange = () => {
+            terminal.writeln(
+                TERMINAL_PRELUDE +
+                    t('console.state_change', {
+                        defaultValue: 'Servidor marcado como {{state}}...',
+                        state: statusRef.current,
+                    }) +
+                    '\u001b[0m'
+            );
+        };
+
+        i18n.on('languageChanged', onLanguageChange);
+        return () => {
+            i18n.off('languageChanged', onLanguageChange);
+        };
+    }, []);
 
     useEventListener(
         'resize',
@@ -203,15 +240,15 @@ export default () => {
             {canSendCommands && (
                 <div className={classNames('relative', styles.overflows_container)}>
                     <input
-                    className={classNames('peer', styles.command_input)}
-                    type={'text'}
-                    placeholder={t('console.input.placeholder', { defaultValue: 'Digite um comando...' })}
-                    aria-label={t('console.input.ariaLabel', { defaultValue: 'Entrada de comando do console.' })}
-                    disabled={!instance || !connected}
-                    onKeyDown={handleCommandKeyDown}
-                    autoCorrect={'off'}
-                    autoCapitalize={'none'}
-                />
+                        className={classNames('peer', styles.command_input)}
+                        type={'text'}
+                        placeholder={t('console.input.placeholder', { defaultValue: 'Digite um comando...' })}
+                        aria-label={t('console.input.ariaLabel', { defaultValue: 'Entrada de comando do console.' })}
+                        disabled={!instance || !connected}
+                        onKeyDown={handleCommandKeyDown}
+                        autoCorrect={'off'}
+                        autoCapitalize={'none'}
+                    />
                     <div
                         className={classNames(
                             'text-gray-100 peer-focus:text-gray-50 peer-focus:animate-pulse',

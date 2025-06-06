@@ -15,9 +15,10 @@
     "installing": "Instalando",
     "restoring_backup": "Restaurando Backup",
     "unavailable": "Indisponível",
+    "starting": "Iniciando", 
     "running": "Rodando",
     "stopping": "Parando",
-    "offline": "Offline"    
+    "offline": "Desligado"    
   },
   "resources": {
     "of_limit": "de {{limit}}"
