@@ -1,0 +1,74 @@
+{
+  "chart": {
+    "cpu_load": "Carga de CPU",
+    "memory": "Memória",
+    "network": "Rede"
+  },
+  "network": {
+    "in": "Entrada",
+    "out": "Saída"
+  },
+  "status": {
+    "suspended": "Suspenso",
+    "connection_error": "Erro de Conexão",
+    "transferring": "Transferindo",
+    "installing": "Instalando",
+    "restoring_backup": "Restaurando Backup",
+    "unavailable": "Indisponível",
+    "starting": "Iniciando", 
+    "running": "Rodando",
+    "stopping": "Parando",
+    "offline": "Desligado"    
+  },
+  "resources": {
+    "of_limit": "de {{limit}}"
+  },
+  "common": {
+    "unlimited": "Ilimitado",
+    "cancel": "Cancelar",
+    "okay": "Confirmar"
+  },
+  "power": {
+    "confirm_title": "Forçar parada do processo",
+    "confirm_button": "Continuar",
+    "confirm_message": "Forçar a parada do servidor pode causar corrupção de dados.",
+    "start": "Iniciar",
+    "restart": "Reiniciar",
+    "stop": "Parar",
+    "kill": "Matar"
+  },
+    "server": {
+    "address": "Endereço",
+    "uptime": "Tempo online",
+    "offline": "Offline",
+    "cpu_load": "Uso de CPU",
+    "memory": "Memória",
+    "disk": "Disco",
+    "network_in": "Rede (Entrada)",
+    "network_out": "Rede (Saída)"
+  },
+  "routes": {
+    "account": "Conta",
+    "api_credentials": "Credenciais da API",
+    "ssh_keys": "Chaves SSH",
+    "activity": "Atividade",
+    "console": "Console",
+    "files": "Arquivos",
+    "databases": "Bancos de Dados",
+    "schedules": "Agendamentos",
+    "users": "Usuários",
+    "backups": "Backups",
+    "network": "Rede",
+    "startup": "Inicialização",
+    "settings": "Configurações",
+    "properties": "Propriedades"
+  },
+  "console": {
+    "input": {
+      "placeholder": "Digite um comando...",
+      "ariaLabel": "Entrada de comando do console."
+    },
+    "transfer_failed": "A transferência falhou.",
+    "state_change": "Servidor marcado como {{state}}..."
+  }  
+}

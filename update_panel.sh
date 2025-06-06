@@ -30,18 +30,6 @@ WEBPACK_VERSION=$(yarn list --pattern webpack | grep -oP 'webpack@\K[0-9]+' | he
 echo "Node.js version detectada: $NODE_MAJOR.x"
 echo "Webpack major version detectada: $WEBPACK_VERSION.x"
 
-if [ "$WEBPACK_VERSION" -lt 5 ] && [ "$NODE_MAJOR" -ge 18 ]; then
-    echo ""
-    echo "========================================="
-    echo "ERRO FATAL:"
-    echo "Você está usando Node.js $NODE_MAJOR.x com Webpack $WEBPACK_VERSION.x"
-    echo "Webpack 4.x NÃO é compatível com Node >= 18!"
-    echo "Use Node 16.x LTS para buildar esse painel."
-    echo "Para usar Node 18+ você PRECISA migrar para Webpack 5.x ou superior."
-    echo "========================================="
-    exit 1
-fi
-
 # === INÍCIO ===
 echo "=== [$DATE_DISPLAY] Iniciando atualização do painel Pterodactyl ==="
 
@@ -63,11 +51,13 @@ echo ">> Instalando dependências frontend"
 sudo yarn install
 
 echo ">> Compilando frontend"
-# Limpa todas as possíveis variáveis de ambiente que possam afetar o Node
-unset NODE_OPTIONS
-export NODE_OPTIONS=""
-
-yarn run build:production
+# Compila usando o legacy-provider apenas se necessário
+if [ "$WEBPACK_VERSION" -lt 5 ] && [ "$NODE_MAJOR" -ge 17 ]; then
+    echo ">> Usando NODE_OPTIONS=--openssl-legacy-provider para compilar (Node >= 17 e Webpack < 5)"
+    NODE_OPTIONS=--openssl-legacy-provider yarn run build:production
+else
+    yarn run build:production
+fi
 
 echo ">> Atualizando dependências PHP"
 sudo composer install --no-dev --optimize-autoloader

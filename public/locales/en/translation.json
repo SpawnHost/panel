@@ -1,0 +1,74 @@
+{
+  "chart": {
+    "cpu_load": "CPU Load",
+    "memory": "Memory",
+    "network": "Network"
+  },
+  "network": {
+    "in": "Inbound",
+    "out": "Outbound"
+  },
+  "status": {
+    "suspended": "Suspended",
+    "connection_error": "Connection Error",
+    "transferring": "Transferring",
+    "installing": "Installing",
+    "restoring_backup": "Restoring Backup",
+    "unavailable": "Unavailable",
+    "starting": "Starting", 
+    "running": "Running",
+    "stopping": "Stopping",
+    "offline": "Offline"
+  },
+  "resources": {
+    "of_limit": "of {{limit}}"
+  },
+  "common": {
+    "unlimited": "Unlimited",
+    "cancel": "Cancel",
+    "okay": "Okay"      
+  },
+  "power": {
+    "confirm_title": "Forcibly Stop Process",
+    "confirm_button": "Continue",
+    "confirm_message": "Forcibly stopping a server can lead to data corruption.",
+    "start": "Start",
+    "restart": "Restart",
+    "stop": "Stop",
+    "kill": "Kill"
+  },
+  "server": {
+    "address": "Address",
+    "uptime": "Uptime",
+    "offline": "Offline",
+    "cpu_load": "CPU Load",
+    "memory": "Memory",
+    "disk": "Disk",
+    "network_in": "Network (Inbound)",
+    "network_out": "Network (Outbound)"
+  },
+  "routes": {
+    "account": "Account",
+    "api_credentials": "API Credentials",
+    "ssh_keys": "SSH Keys",
+    "activity": "Activity",
+    "console": "Console",
+    "files": "Files",
+    "databases": "Databases",
+    "schedules": "Schedules",
+    "users": "Users",
+    "backups": "Backups",
+    "network": "Network",
+    "startup": "Startup",
+    "settings": "Settings",
+    "properties": "Properties"
+  },
+  "console": {
+    "input": {
+      "placeholder": "Type a command...",
+      "ariaLabel": "Console command input."
+    },
+    "transfer_failed": "Transfer has failed.",
+    "state_change": "Server marked as {{state}}..."
+  }  
+}
