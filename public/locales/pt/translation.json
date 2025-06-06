@@ -61,5 +61,13 @@
     "startup": "Inicialização",
     "settings": "Configurações",
     "properties": "Propriedades"
+  },
+  "console": {
+    "input": {
+      "placeholder": "Digite um comando...",
+      "ariaLabel": "Entrada de comando do console."
+    },
+    "transfer_failed": "A transferência falhou.",
+    "state_change": "Servidor marcado como {{state}}..."
   }  
 }

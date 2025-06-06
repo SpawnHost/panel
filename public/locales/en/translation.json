@@ -61,5 +61,13 @@
     "startup": "Startup",
     "settings": "Settings",
     "properties": "Properties"
+  },
+  "console": {
+    "input": {
+      "placeholder": "Type a command...",
+      "ariaLabel": "Console command input."
+    },
+    "transfer_failed": "Transfer has failed.",
+    "state_change": "Server marked as {{state}}..."
   }  
 }

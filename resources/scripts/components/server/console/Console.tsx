@@ -85,12 +85,11 @@ export default () => {
     };
 
     const handleDaemonErrorOutput = (line: string) =>
-        terminal.writeln(
-            TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m'
-        );
-
+        terminal.writeln(TERMINAL_PRELUDE + t('console.transfer_failed', {
+            defaultValue: 'A transferência falhou.',}) + '\u001b[0m');
     const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
+        terminal.writeln(TERMINAL_PRELUDE + t('console.state_change', {
+            defaultValue: 'Servidor marcado como {{state}}...', state, }) + '\u001b[0m');
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {
@@ -204,15 +203,15 @@ export default () => {
             {canSendCommands && (
                 <div className={classNames('relative', styles.overflows_container)}>
                     <input
-                        className={classNames('peer', styles.command_input)}
-                        type={'text'}
-                        placeholder={'Type a command...'}
-                        aria-label={'Console command input.'}
-                        disabled={!instance || !connected}
-                        onKeyDown={handleCommandKeyDown}
-                        autoCorrect={'off'}
-                        autoCapitalize={'none'}
-                    />
+                    className={classNames('peer', styles.command_input)}
+                    type={'text'}
+                    placeholder={t('console.input.placeholder', { defaultValue: 'Digite um comando...' })}
+                    aria-label={t('console.input.ariaLabel', { defaultValue: 'Entrada de comando do console.' })}
+                    disabled={!instance || !connected}
+                    onKeyDown={handleCommandKeyDown}
+                    autoCorrect={'off'}
+                    autoCapitalize={'none'}
+                />
                     <div
                         className={classNames(
                             'text-gray-100 peer-focus:text-gray-50 peer-focus:animate-pulse',
